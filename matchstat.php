@@ -1,6 +1,6 @@
 <?php
-include "tier.php";
-include "teamkda.php";
+include "team.php";
+include "personaname.php";
 
 $content = file_get_contents("GetHeroesListing.xml");
 $xml = simplexml_load_string($content);
@@ -12,12 +12,9 @@ foreach($xml->heroes->hero as $hero)
 }
 $stat = array();
 $count = array();
-$lea = array();
 $hot = array();
-$kda = $teamkda;
+$kda = array();
 $teaminfo = array();
-
-$regex = '/^Alliance|^CDEC|^dc|^EHOME|^Empire|^EG|^Fnatic|^IG|^LGD|^Liquid|^Mski|^MVP|^Navi|^NewBee|^OG|^Secret|^TongFu|^Vega|^VG|^Wings|^TSpirit|^coL|^Na`Vi|^TNC|^ESC|^BOY|^TEAM|^SG|^LFY|^TS|^FE|^Kinguin|^PANDA|^ZB|^EWE|^RF|^CPS|^PMA|^RLP/i';
 
 $file = file("/tmp/matches_filelist") or exit("Unable to open file!");
 foreach($file as $line)
@@ -37,9 +34,6 @@ foreach($file as $line)
         continue;
 
     array_push($hot, "$xml->leagueid");
-
-    if(!key_exists("$xml->leagueid",$tier)) continue;
-    if($tier["$xml->leagueid"] == "1") continue;
 
     // heroes
     foreach($xml->players->player as $player)
@@ -90,30 +84,27 @@ foreach($file as $line)
         $count["$name"]["a"] = $count["$name"]["a"] + $player->assists;
     }
 
-    // add filelist db
-    $mdbh = dba_open("matches_filelist.db", "c", "db4");
-    $mkey = dba_fetch("$filename", $mdbh);
-    if($mkey == "")
-    {
-        dba_replace("$filename", "p", $mdbh);
-        dba_close($mdbh);
-        echo "add /tmp/$filename\n";
-    }
-    else
-    {
-        dba_close($mdbh);
-        echo "old /tmp/$filename\n";
-        continue;
-    }
-
     //history
-    $odbh = dba_open("official_account.db", "c", "db4");
     foreach($xml->players->player as $player)
     {
-        $key = dba_fetch("$player->account_id", $odbh);
-        if($key == "") continue;
-        if(!preg_match($regex, $key)) continue;
+        $player_slot = "$player->player_slot";
+        if($player_slot < 10) $teamid = $xml->radianti_team_id;
+        if($player_slot > 120) $teamid = $xml->dire_team_id;
+	
+	if($teamid == "") continue;
+	if(array_key_exists("$teamid", $team))
+	    $teamname = $team["$teamid"];
+	else
+	    continue;
 
+	if($teamname == "") continue;
+
+	if(array_key_exists("$player->account_id", $personaname))
+            $key = $teamname."@".$personaname["$player->account_id"];
+	else
+	    continue;
+
+        echo "$key =============\n";
         $name = $heroes_arr["$player->hero_id"];
 
         if(!isset($kda["$key"]))
@@ -131,7 +122,6 @@ foreach($file as $line)
 
         $kda["$key"]["$name"]["all"] = ++$kda["$key"]["$name"]["all"];
 
-        $player_slot = "$player->player_slot";
         if(($player_slot < 10 && $xml->radiant_win == "true")
                 || ($player_slot > 120 && $xml->radiant_win == "false"))
             $kda["$key"]["$name"]["w"] = ++$kda["$key"]["$name"]["w"];
@@ -143,18 +133,6 @@ foreach($file as $line)
         $kda["$key"]["$name"]["a"] = $kda["$key"]["$name"]["a"] + $player->assists;
         arsort($kda["$key"]);
     }
-    dba_close($odbh);
-}
-
-$content = file_get_contents("GetLeagueListing.xml");
-$xml = simplexml_load_string($content);
-$leagues = $xml->leagues[0];
-
-foreach($leagues as $league)
-{
-    $l = "$league->leagueid";
-    $name = "$league->name";
-    $lea["$l"] =  "$name";
 }
 
 arsort($count);
@@ -163,20 +141,22 @@ $handle = fopen("./teamkda.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$teamkda='.var_export ($kda,true).';'.chr(10).'?>');
 fclose($handle);
 
+// player - pre
 foreach($kda as $k => $v)
 {
     $kda[$k] = array_splice($v, 0, 3);
 }
 
-// player
+// player - top3.info
 foreach($kda as $k => $v)
 {
     echo "----------- $k\n";
     $teamTmp = explode('@', $k, 2);
     $teamName = $teamTmp[0];
     $playerName = $teamTmp[1];
-    if(!isset($teaminfo["$teamName"]))
-        $teaminfo["$teamName"] = array();
+
+    if(!isset($teaminfo["$teamName"])) { $teaminfo["$teamName"] = array(); }
+
     foreach($v as $hero => $h_arr)
     {
         if(!isset($teaminfo["$teamName"]["$playerName"]))
@@ -214,10 +194,6 @@ fclose($handle);
 
 $handle = fopen("./hot.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$hot='.var_export (array_count_values($hot),true).';'.chr(10).'?>');
-fclose($handle);
-
-$handle = fopen("./lea.php", "w+");
-fwrite($handle, '<?php'.chr(10).'$lea='.var_export ($lea,true).';'.chr(10).'?>');
 fclose($handle);
 
 $handle = fopen("./teaminfo.php", "w+");

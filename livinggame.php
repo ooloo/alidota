@@ -1,6 +1,5 @@
 <?php
-include "hot.php";
-include "tier.php";
+//include "hot.php";
 
 $key = "V001/?key=B1426000A46BD10C3FE0EAB36501A9E3&format=xml&language=zh";
 $head = "https://api.steampowered.com/IDOTA2Match_570";
@@ -9,43 +8,33 @@ $content = file_get_contents("/var/www/html/GetLiveLeagueGames.xml");
 if(empty($content)) exit;
 
 //$arr = $hot;
-$arr = array();
+$arr= array();
 
 $xml = simplexml_load_string($content);
 
 foreach($xml->games->game as $game)
 {
-    if($game->league_tier != 1 && $game->league_id != 0)
+    if($game->spectators > 299 && $game->league_id != 0)
     {
-        // rewrite GetLiveLeagueGames.xml 
-        //$item = $xml->addChild('game');
-        //$node = $item->addChild("league_id", $game->league_id);
-        //$node = $item->addChild("radiant_teami_id", $game->radiant_team->team_id);
-        //$node = $item->addChild("dire_team_id", $game->dire_team->team_id);
-        //$node = $item->addChild("spectators", $game->spectators);
-        //$node = $item->addChild("league_tier", $game->league_tier);
-        //$node = $item->addChild("series_type", $game->series_type);
-        //$node = $item->addChild("radiant_score", $game->scoreboard->radiant->score);
-        //$node = $item->addChild("dire_score", $game->scoreboard->dire->score);
-
         // add league list
         $l = $game->league_id;
-        $arr["$l"] = "$game->league_tier";
-        $tier["$l"] = "$game->league_tier";
-
+        $arr["$l"] = 1;
+	
         // record all players
         foreach($game->players->player as $player)
         {
+            if($player->team == 0)
+                $tn = $game->radiant_team->team_name;
+            if($player->team == 1)
+                $tn = $game->dire_team->team_name;
+            echo "$tn@$player->name\n";
+            
             $dbh = dba_open("account.db", "c", "db4");
-            dba_replace("$player->account_id", "$player->name", $dbh);
+            dba_replace("$player->account_id", "$tn@$player->name", $dbh);
             dba_close($dbh);
         }
     }
 }
-
-$handle = fopen("./tier.php", "w+");
-fwrite($handle, '<?php'.chr(10).'$tier='.var_export ($tier,true).';'.chr(10).'?>');
-fclose($handle);
 
 echo "GetLiveLeagueGames Done, Ready to get match content.\n";
 
@@ -70,8 +59,6 @@ if(!empty($arr))
         $show_num = 0;
         foreach($xml->matches->match as $match)
         {
-            if((++$show_num) >= 10) break;
-
             $player_list = $match->players->player;
             $player_count = $player_list->count();
             //echo "$player_count\n";
@@ -79,7 +66,7 @@ if(!empty($arr))
 
             $now = time();
             $mtime = "$match->start_time";
-            if($now - $mtime > 86400*2) continue;
+            if($now - $mtime > 86400*15) break;
 
             $m_url = "$head/GetMatchDetails/$key&match_id=$match->match_id";
             $match_file = "/tmp/$match->match_id.xml";

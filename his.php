@@ -10,6 +10,7 @@
 
     foreach($match_info as $key => $value)
     {
+
         $karr = explode(',', $key);
         $series_type = $karr[2];
         $bo = 1;

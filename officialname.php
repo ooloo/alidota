@@ -1,9 +1,10 @@
 <?php
 
 $official_account = array();
+$personaname = array();
 
-$key = "v1/?key=B1426000A46BD10C3FE0EAB36501A9E3&format=xml&language=zh";
-$head = "https://api.steampowered.com/IDOTA2Fantasy_570/GetPlayerOfficialInfo";
+$key = "v2/?key=B1426000A46BD10C3FE0EAB36501A9E3";
+$head = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries";
 
 $file = file("/tmp/officialname_filelist") or exit("Unable to open file!");
 foreach($file as $line)
@@ -19,7 +20,8 @@ foreach($file as $line)
 
     foreach($xml->players->player as $player) 
     {
-        $playerurl = "$head/$key&AccountID=$player->account_id";
+	$steamid = 76561197960265728 + $player->account_id;
+        $playerurl = "$head/$key&steamids=$steamid";
         $official_account["$player->account_id"] = "$playerurl";
     }
 }
@@ -28,7 +30,12 @@ foreach($official_account as $accid => $playerurl)
 {
     $content = file_get_contents("$playerurl");
 
-    $xml = simplexml_load_string($content);
+    echo "$playerurl\n";
+    $tmpJson = json_decode($content, TRUE);
+
+    $offname = $tmpJson["response"]["players"][0]["personaname"];
+    $personaname["$accid"] = "$offname"; 
+    continue;
 
     if(!empty($xml->Name) && !empty($xml->TeamTag))
     {
@@ -38,5 +45,9 @@ foreach($official_account as $accid => $playerurl)
         echo "$accid $xml->TeamTag@$xml->Name\n";
     }
 }
+
+$handle = fopen("./personaname.php", "w+");
+fwrite($handle, '<?php'.chr(10).'$personaname='.var_export ($personaname,true).';'.chr(10).'?>');
+fclose($handle);
 
 ?>
