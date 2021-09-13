@@ -1,5 +1,5 @@
 <?php
-include "team.php";
+include "official_team.php";
 include "personaname.php";
 
 $content = file_get_contents("GetHeroesListing.xml");
@@ -15,8 +15,10 @@ $count = array();
 $hot = array();
 $kda = array();
 $teaminfo = array();
+$team = $official_team;
 
 $file = file("/tmp/matches_filelist") or exit("Unable to open file!");
+$mnum = count($file);
 foreach($file as $line)
 {
     $filename = str_replace("\n", "", $line);
@@ -26,10 +28,20 @@ foreach($file as $line)
 
     $xml = simplexml_load_string($content);
 
+    // append team array
+    if(!array_key_exists("$xml->radiant_team_id",$team))
+    {
+        $team["$xml->radiant_team_id"] = "$xml->radiant_name";
+        echo "$filename =====> $xml->radiant_team_id, $xml->radiant_name\n";
+    }
+    if(!array_key_exists("$xml->dire_team_id",$team))
+    {
+        $team["$xml->dire_team_id"] = "$xml->dire_name";
+        echo "$filename =====> $xml->dire_team_id, $xml->dire_name\n";
+    }
+
     //if(empty($xml->radiant_name) || empty($xml->dire_name))
       //  continue;
-    if($xml->first_blood_time == "0" || empty($xml->first_blood_time))
-        continue;
     if($xml->human_players != "10")
         continue;
 
@@ -63,14 +75,14 @@ foreach($file as $line)
 
         if(!isset($count["$name"]))
             $count["$name"] = array(
-                    "all" => 0,
+                    "all" => $mnum,
                     "w" => 0,
                     "l" => 0,
                     "k" => 0,
                     "d" => 0,
                     "a" => 0,
                     );
-        $count["$name"]["all"] = ++$count["$name"]["all"];
+        //$count["$name"]["all"] = ++$count["$name"]["all"];
 
         $player_slot = "$player->player_slot";
         if(($player_slot < 10 && $xml->radiant_win == "true")
@@ -84,28 +96,30 @@ foreach($file as $line)
         $count["$name"]["a"] = $count["$name"]["a"] + $player->assists;
     }
 
-    //history
+    // players 
     foreach($xml->players->player as $player)
     {
         $player_slot = "$player->player_slot";
-        if($player_slot < 10) $teamid = $xml->radianti_team_id;
+        if($player_slot < 10) $teamid = $xml->radiant_team_id;
         if($player_slot > 120) $teamid = $xml->dire_team_id;
-	
-	if($teamid == "") continue;
-	if(array_key_exists("$teamid", $team))
-	    $teamname = $team["$teamid"];
-	else
-	    continue;
 
-	if($teamname == "") continue;
+        echo "$player->persona :::::::::::::>$filename, $player_slot, $teamid, $player->account_id\n";
+        if($teamid == "") continue;
+        if(array_key_exists("$teamid", $team))
+            $teamname = $team["$teamid"];
+        else
+            continue;
 
-	if(array_key_exists("$player->account_id", $personaname))
-            $key = $teamname."@".$personaname["$player->account_id"];
-	else
-	    continue;
+        if($player_slot < 10) $teamname = trim("$xml->radiant_name");
+        if($player_slot > 120) $teamname = trim("$xml->dire_name");
+        if($teamname == "") continue;
 
-        echo "$key =============\n";
+        if($player->persona == "") continue;
+        $personaname["$player->account_id"] = "$player->persona";
+        $key = $teamname."@".$player->persona;
+
         $name = $heroes_arr["$player->hero_id"];
+        echo "$key =============> $xml->leagueid, $player->account_id, $name\n";
 
         if(!isset($kda["$key"]))
             $kda["$key"] = array();
@@ -135,59 +149,15 @@ foreach($file as $line)
     }
 }
 
-arsort($count);
-
 $handle = fopen("./teamkda.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$teamkda='.var_export ($kda,true).';'.chr(10).'?>');
 fclose($handle);
-
-// player - pre
-foreach($kda as $k => $v)
-{
-    $kda[$k] = array_splice($v, 0, 3);
-}
-
-// player - top3.info
-foreach($kda as $k => $v)
-{
-    echo "----------- $k\n";
-    $teamTmp = explode('@', $k, 2);
-    $teamName = $teamTmp[0];
-    $playerName = $teamTmp[1];
-
-    if(!isset($teaminfo["$teamName"])) { $teaminfo["$teamName"] = array(); }
-
-    foreach($v as $hero => $h_arr)
-    {
-        if(!isset($teaminfo["$teamName"]["$playerName"]))
-        {
-            $teaminfo["$teamName"]["$playerName"] = array(
-                    "h" => "$hero",
-                    "w" => $h_arr["w"],
-                    "l" => $h_arr["l"],
-                    "k" => $h_arr["k"],
-                    "d" => $h_arr["d"],
-                    "a" => $h_arr["a"],
-                    );
-        }
-        else
-        {
-            $teaminfo["$teamName"]["$playerName"]["h"] = $teaminfo["$teamName"]["$playerName"]["h"]."|$hero";
-            $teaminfo["$teamName"]["$playerName"]["w"] = $teaminfo["$teamName"]["$playerName"]["w"]+$h_arr["w"];
-            $teaminfo["$teamName"]["$playerName"]["l"] = $teaminfo["$teamName"]["$playerName"]["l"]+$h_arr["l"];
-            $teaminfo["$teamName"]["$playerName"]["k"] = $teaminfo["$teamName"]["$playerName"]["k"]+$h_arr["k"];
-            $teaminfo["$teamName"]["$playerName"]["d"] = $teaminfo["$teamName"]["$playerName"]["d"]+$h_arr["d"];
-            $teaminfo["$teamName"]["$playerName"]["a"] = $teaminfo["$teamName"]["$playerName"]["a"]+$h_arr["a"];
-        }
-    }
-}
-
-//ksort($kda);
 
 $handle = fopen("./stat.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$stat='.var_export ($stat,true).';'.chr(10).'?>');
 fclose($handle);
 
+arsort($count);
 $handle = fopen("./count.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$count='.var_export ($count,true).';'.chr(10).'?>');
 fclose($handle);
@@ -196,8 +166,12 @@ $handle = fopen("./hot.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$hot='.var_export (array_count_values($hot),true).';'.chr(10).'?>');
 fclose($handle);
 
-$handle = fopen("./teaminfo.php", "w+");
-fwrite($handle, '<?php'.chr(10).'$teaminfo='.var_export ($teaminfo,true).';'.chr(10).'?>');
+$handle = fopen("./personaname.php", "w+");
+fwrite($handle, '<?php'.chr(10).'$personaname='.var_export ($personaname,true).';'.chr(10).'?>');
+fclose($handle);
+
+$handle = fopen("./team.php", "w+");
+fwrite($handle, '<?php'.chr(10).'$team='.var_export ($team,true).';'.chr(10).'?>');
 fclose($handle);
 
 ?>

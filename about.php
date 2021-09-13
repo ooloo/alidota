@@ -2,7 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.6.2/html5shiv.js"></script>
@@ -12,35 +14,21 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 
-<title>Dota2 直播</title>
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<title>DOTA2 职业联赛</title>
 
 <STYLE>
-#m {
-	MARGIN: 0px auto; WIDTH: 1020px
-}
-.left {
-width: 778px;
-height: auto;
-position: relative;
-float: left;
-}
 
-.right {
-float: right;
-overflow: hidden;
-width: 218px;
-height: auto;
-padding-right: 10px;
-}
-
-.bottom { float:left; height:200px; width:1000px; text-align:center; font-size:12px;}
-.container { width: 1030px;}
+.container { width: auto;}
 
 </STYLE>
+<?php include_once("analyticstracking.php") ?>
 </head>
 
 <body>
-<?php include_once("analyticstracking.php") ?>
+<div class="container">
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 <div class="container">
@@ -51,93 +39,81 @@ padding-right: 10px;
 <span class="icon-bar"></span>
 <span class="icon-bar"></span>
 </button>
-<a class="navbar-brand" href="">DOTA2 直播</a>
+<a class="navbar-brand" href="">DOTA2 职业联赛</a>
 </div>
 <div class="collapse navbar-collapse">
 <ul class="nav navbar-nav">
-<li><a href="http://alidota.com/index.php">Home</a></li>
-<li><a href="http://alidota.com/player.php">Player</a></li>
-<li><a href="http://alidota.com/heroes.php">Heroes</a></li>
-<li class="active"><a href="http://alidota.com/about.php">Updates</a></li>
+<li><a href="http://alidota.cn/index.php">Home</a></li>
+<li><a href="http://alidota.cn/matches.php">Matches</a></li>
+<li class="active"><a href="http://alidota.cn/about.php">About</a></li>
 </ul>
 </div><!--/.nav-collapse -->
 </div>
 </div>
 
-<DIV id=m>
-
 <?php
-    include "hot.php";
+    echo "<br><BR><BR>";
 
-    echo "<br><BR><BR><div class=\"left\">";
-
-    echo "<div class=\"panel panel-info\">";
+    echo "<div class=\"panel panel-primary\">";
     echo "<div class=\"panel-heading\">官方更新日志传送门</div>";
     echo "<div class=\"panel-body\">";
-    echo "<ul><a href='http://www.dota2.com.cn/news/gamepost/news_update/index.htm' target='_blank'>
-        http://www.dota2.com.cn/news/gamepost/news_update/index.htm</a></ul>";
+    echo "<ul><li><a href='http://www.dota2.com.cn/news/gamepost/news_update/index.htm' target='_blank'>官方更新日志传送门</a></li></ul>";
     echo "</div></div>";
 
     echo "<div class=\"panel panel-info\">";
     echo "<div class=\"panel-heading\">4月30日更新日志:6.87b平衡性改动</div>";
     echo "<div class=\"panel-body\">";
     echo "<ul>
-    修复飓风长戟和矮人直升机的追踪导弹之间的相互作用<br />
-    修复房间内只能显示4个解说频道而不是6个的问题<br />
-    修复天穹守望者的风暴双雄在重连游戏后的热键问题<br />
-    牺牲（巫妖）的冷却时间从44/36/28/20秒增加至60/50/40/30秒<br />
-    牺牲（巫妖）的魔法恢复量从25/40/55/70%增加至30/50/70/90%<br />
-    刃甲的冷却时间从13秒增加至18秒<br />
-    忍术（赏金猎人）的减速效果从25/27/29/31%降低至18/22/26/30%<br />
-    臂章的护甲加成现在会在完全启动后提供</ul>";
+    <li>修复飓风长戟和矮人直升机的追踪导弹之间的相互作用</li>
+    <li>修复房间内只能显示4个解说频道而不是6个的问题</li>
+    <li>修复天穹守望者的风暴双雄在重连游戏后的热键问题</li>
+    <li>牺牲（巫妖）的冷却时间从44/36/28/20秒增加至60/50/40/30秒</li>
+    <li>牺牲（巫妖）的魔法恢复量从25/40/55/70%增加至30/50/70/90%</li>
+    <li>刃甲的冷却时间从13秒增加至18秒</li>
+    <li>忍术（赏金猎人）的减速效果从25/27/29/31%降低至18/22/26/30%</li>
+    <li>臂章的护甲加成现在会在完全启动后提供</ul>";
     echo "</div></div>";
 
     echo "<div class=\"panel panel-info\">";
     echo "<div class=\"panel-heading\">4月26日更新日志: 6.87 游戏性更新</div>";
     echo "<div class=\"panel-body\">";
-    echo "<ul><a href='http://www.dota2.com.cn/687/' target='_blank'>
-        http://www.dota2.com.cn/687/</a></ul>";
+    echo "<ul><li><a href='http://www.dota2.com.cn/687/' target='_blank'>
+        http://www.dota2.com.cn/687/</a></li></ul>";
     echo "</div></div>";
 
     echo "<div class=\"panel panel-info\">";
     echo "<div class=\"panel-heading\">1月22日更新日志：修复视角居中问题</div>";
     echo "<div class=\"panel-body\">";
-    echo "<ul>1月22日更新日志：修复双击快捷键不会使视角居中的问题</ul>";
+    echo "<ul><li>1月22日更新日志：修复双击快捷键不会使视角居中的问题</li></ul>";
     echo "</div></div>";
 
     echo "<div class=\"panel panel-info\">";
     echo "<div class=\"panel-heading\">1月21日更新日志：推出6.86d平衡性改动</div>";
     echo "<div class=\"panel-body\">";
-    echo "<ul>现在天穹守望者的风暴双雄复制体击杀敌方英雄后本体会获得相应的经验<br />
-    修正陈的神圣劝化和噬魂鬼的感染之间的相互作用<br />
-    修复双击2级远行鞋会传送至离泉水最近友方英雄而不是泉水的问题<br />
-    以太之镜的配方中抗魔斗篷替换为550金的图纸（不再提供魔法抗性加成）<br />
-    陈装备阿哈利姆神杖后不再减少上帝之手的冷却时间<br />
-    祈求者的基础敏捷从20减少至14<br />
-    超震声波的魔法消耗从200点上升至300点
+    echo "<ul>
+    <li>现在天穹守望者的风暴双雄复制体击杀敌方英雄后本体会获得相应的经验</li>
+    <li>修正陈的神圣劝化和噬魂鬼的感染之间的相互作用</li>
+    <li>修复双击2级远行鞋会传送至离泉水最近友方英雄而不是泉水的问题</li>
+    <li>以太之镜的配方中抗魔斗篷替换为550金的图纸（不再提供魔法抗性加成）</li>
+    <li>陈装备阿哈利姆神杖后不再减少上帝之手的冷却时间</li>
+    <li>祈求者的基础敏捷从20减少至14</li>
     </ul>";
-    echo "</div></div>";
-
-    echo "<div class=\"panel panel-info\">";
-    echo "<div class=\"panel-heading\">1月20日更新日志：修复守卫放置问题</div>";
-    echo "<div class=\"panel-body\">";
-    echo "<ul>修复将守卫分享给召唤单位会导致守卫被放置的问题
-    修复敌人在摧毁发条技师齿轮后还会短时间内继续攻击的问题</ul>";
     echo "</div></div>";
 
     echo "<div class=\"panel panel-info\">";
     echo "<div class=\"panel-heading\">1月19日更新日志：队长征召模式选人时间增加</div>";
     echo "<div class=\"panel-body\">";
-    echo "<ul>队长征召（CD）模式的每个队伍总选人时间从150秒增加至180秒<br />
-    修复大地之灵的巨石冲击不以单位为目标的问题</ul>";
+    echo "<ul>
+    <li>队长征召（CD）模式的每个队伍总选人时间从150秒增加至180秒</li>
+    <li>修复大地之灵的巨石冲击不以单位为目标的问题</li></ul>";
     echo "</div></div>";
 
     echo "<div class=\"panel panel-info\">";
     echo "<div class=\"panel-heading\">1月15日更新日志：商城推出全新套装</div>";
     echo "<div class=\"panel-body\">";
     echo "<ul>
-    修复神谕者相关的天梯匹配漏洞。利用漏洞的玩家将重新回到校准比赛阶段。<br />
-    修复战争迷雾中单位身上的粒子特效位置出错的问题<br />
+    <li>修复神谕者相关的天梯匹配漏洞。利用漏洞的玩家将重新回到校准比赛阶段。</li>
+    <li>修复战争迷雾中单位身上的粒子特效位置出错的问题</li>
     </ul>";
     echo "</div></div>";
 
@@ -145,11 +121,11 @@ padding-right: 10px;
     echo "<div class=\"panel-heading\">1月14日更新日志：修复玩家昵称会被替换的问题</div>";
     echo "<div class=\"panel-body\">";
     echo "<ul>
-    修复物品详情页面不显示对应联赛当前总奖金的问题<br />
-    修正了战争迷雾的渲染效果，现在显示极小视野时能正确显示其范围<br />
-    现在树之祭祀和守卫不再能分享给幻象<br />
-    修复银月之晶吞掉后不计入财产总和的问题<br />
-    修复玩家昵称会被游戏内文本替代的问题<br />
+    <li>修复物品详情页面不显示对应联赛当前总奖金的问题</li>
+    <li>修正了战争迷雾的渲染效果，现在显示极小视野时能正确显示其范围</li>
+    <li>现在树之祭祀和守卫不再能分享给幻象</li>
+    <li>修复银月之晶吞掉后不计入财产总和的问题</li>
+    <li>修复玩家昵称会被游戏内文本替代的问题</li>
     </ul>";
     echo "</div></div>";
 
@@ -157,32 +133,32 @@ padding-right: 10px;
     echo "<div class=\"panel-heading\">12月29日更新日志：6.86c平衡性更新</div>";
     echo "<div class=\"panel-body\">";
     echo "<ul>
-    祈求者：灵动迅捷的攻击力/攻速从30/40/50/60/70/80/90调整为10/25/40/55/70/85/100<br />
-    祈求者：基础力量减少2点<br />
-    虚空假面：时间漫游的施法距离从550提高至625<br />
-    虚空假面：力量成长从1.6提高至1.8<br />
-    虚空假面：时间膨胀的持续时间从5.5/7/8.5/10秒提高至6/8/10/12秒<br />
-    虚空假面：时间膨胀的冷却时间从34/28/22/16秒增加至36/30/24/18秒<br />
-    矮人直升机：召唤飞弹第一枚导弹的伤害从220/285/350点减少至200/275/350点<br />
-    巨牙海民：海象神拳的冷却时间从20/16/12秒增加至36/24/12秒<br />
-    祸乱之源：噩梦的冷却时间从16/15/14/13秒增加至22/19/16/13秒<br />
-    力丸：绝杀秘技的冷却时间从70秒降低至40秒<br />
-    力丸：绝杀秘技的作用范围从475提高至500<br />
-    力丸：闪烁突袭的施法距离从700提高至800<br />
-    力丸：闪烁突袭的施法前摇从0.4秒降低至0.3秒<br />
-    殁境神蚀者：奥术天球的智力偷取从1/2/3/4提高至2/3/4/5<br />
-    殁境神蚀者：奥术天球的智力偷取持续时间从40秒提高至50秒<br />
-    戴泽：薄葬的施法前摇从0.35秒增加至0.4秒<br />
-    戴泽：暗影波的魔法消耗从80/90/100/110点增加至90/100/110/120点<br />
-    寒冬飞龙：寒冬诅咒的攻速加成从50提高至70<br />
-    不朽尸王：墓碑的冷却时间从60秒增加至70秒<br />
-    黑暗贤者：奔腾的魔法消耗从20/30/40/50点增加至50点<br />
-    死亡先知：基础智力提高3点<br />
-    死亡先知：吸魂巫术的最大生命值吸取从1/1.8/2.6/3.4%提高至1/2/3/4%<br />
-    死亡先知：吸魂巫术的减速从6/10/14/18%平衡为5/10/15/20%<br />
-    死亡先知：驱使恶灵的持续时间从30秒提高至35秒<br />
-    天辉小野点的刷新范围判定现在缩小一些<br />
-    修复德鲁伊升级变形术的时候血量没有增加的问题<br />
+    <li>祈求者：灵动迅捷的攻击力/攻速从30/40/50/60/70/80/90调整为10/25/40/55/70/85/100</li>
+    <li>祈求者：基础力量减少2点</li>
+    <li>虚空假面：时间漫游的施法距离从550提高至625</li>
+    <li>虚空假面：力量成长从1.6提高至1.8</li>
+    <li>虚空假面：时间膨胀的持续时间从5.5/7/8.5/10秒提高至6/8/10/12秒</li>
+    <li>虚空假面：时间膨胀的冷却时间从34/28/22/16秒增加至36/30/24/18秒</li>
+    <li>矮人直升机：召唤飞弹第一枚导弹的伤害从220/285/350点减少至200/275/350点</li>
+    <li>巨牙海民：海象神拳的冷却时间从20/16/12秒增加至36/24/12秒</li>
+    <li>祸乱之源：噩梦的冷却时间从16/15/14/13秒增加至22/19/16/13秒</li>
+    <li>力丸：绝杀秘技的冷却时间从70秒降低至40秒</li>
+    <li>力丸：绝杀秘技的作用范围从475提高至500</li>
+    <li>力丸：闪烁突袭的施法距离从700提高至800</li>
+    <li>力丸：闪烁突袭的施法前摇从0.4秒降低至0.3秒</li>
+    <li>殁境神蚀者：奥术天球的智力偷取从1/2/3/4提高至2/3/4/5</li>
+    <li>殁境神蚀者：奥术天球的智力偷取持续时间从40秒提高至50秒</li>
+    <li>戴泽：薄葬的施法前摇从0.35秒增加至0.4秒</li>
+    <li>戴泽：暗影波的魔法消耗从80/90/100/110点增加至90/100/110/120点</li>
+    <li>寒冬飞龙：寒冬诅咒的攻速加成从50提高至70</li>
+    <li>不朽尸王：墓碑的冷却时间从60秒增加至70秒</li>
+    <li>黑暗贤者：奔腾的魔法消耗从20/30/40/50点增加至50点</li>
+    <li>死亡先知：基础智力提高3点</li>
+    <li>死亡先知：吸魂巫术的最大生命值吸取从1/1.8/2.6/3.4%提高至1/2/3/4%</li>
+    <li>死亡先知：吸魂巫术的减速从6/10/14/18%平衡为5/10/15/20%</li>
+    <li>死亡先知：驱使恶灵的持续时间从30秒提高至35秒</li>
+    <li>天辉小野点的刷新范围判定现在缩小一些</li>
+    <li>修复德鲁伊升级变形术的时候血量没有增加的问题</li>
     </ul>";
     echo "</div></div>";
 
@@ -190,19 +166,19 @@ padding-right: 10px;
     echo "<div class=\"panel-heading\">12月21日更新日志：6.86b平衡性更新</div>";
     echo "<div class=\"panel-body\">";
     echo "<ul>
-    末日使者、虚空假面、死亡先知、德鲁伊和寒冬飞龙已回归队长模式<br />
-    奥术神符的魔法消耗减少从50%降低至40%<br />
-    吸魂巫术的持续时间从4秒增加至5秒<br />
-    奥术天球的窃取智力从0/1/2/3点增加至1/2/3/4点<br />
-    星体禁锢的冷却时间从20/17/14/11秒平衡为22/18/14/10秒<br />
-    刀光谍影（原永久隐身）的背刺伤害系数从0.4/0.6/0.8/1.0增加至0.5/0.75/1.0/1.25<br />
-    绝杀秘技现在只作用于英雄<br />
-    绝杀秘技的作用范围从450增加至475<br />
-    绝杀秘技的冷却时间从90/80/70秒平衡为70秒<br />
-    时间膨胀的作用范围从650增加至725<br />
-    时间膨胀的减速效果从4/6/8/10%平衡为7/8/9/10%<br />
-    时间膨胀的持续时间从6/7/8/9平衡为5.5/7/8.5/10秒<br />
-    神杖升级的肉钩伤害从175/275/375/475点减少至180/270/360/450点<br />
+    <li>末日使者、虚空假面、死亡先知、德鲁伊和寒冬飞龙已回归队长模式</li>
+    <li>奥术神符的魔法消耗减少从50%降低至40%</li>
+    <li>吸魂巫术的持续时间从4秒增加至5秒</li>
+    <li>奥术天球的窃取智力从0/1/2/3点增加至1/2/3/4点</li>
+    <li>星体禁锢的冷却时间从20/17/14/11秒平衡为22/18/14/10秒</li>
+    <li>刀光谍影（原永久隐身）的背刺伤害系数从0.4/0.6/0.8/1.0增加至0.5/0.75/1.0/1.25</li>
+    <li>绝杀秘技现在只作用于英雄</li>
+    <li>绝杀秘技的作用范围从450增加至475</li>
+    <li>绝杀秘技的冷却时间从90/80/70秒平衡为70秒</li>
+    <li>时间膨胀的作用范围从650增加至725</li>
+    <li>时间膨胀的减速效果从4/6/8/10%平衡为7/8/9/10%</li>
+    <li>时间膨胀的持续时间从6/7/8/9平衡为5.5/7/8.5/10秒</li>
+    <li>神杖升级的肉钩伤害从175/275/375/475点减少至180/270/360/450点</li>
     </ul>";
     echo "</div></div>";
 
@@ -215,7 +191,7 @@ padding-right: 10px;
     <li>小兵的金钱奖励每次升级后都会增加1金钱即每7分30秒</span></li>
     </ul>
     <ul>
-    <li>英雄所受的攻城伤害从75%上升至85%防御塔和攻城单位对英雄的伤害提升约13%。<br />例如，1级防御塔对英雄的伤害从82.5点上升至93.5点。</span></li>
+    <li>英雄所受的攻城伤害从75%上升至85%防御塔和攻城单位对英雄的伤害提升约13%。例如，1级防御塔对英雄的伤害从82.5点上升至93.5点。</span></li>
     </ul>
     <ul>
     <li>英雄的基础生命值从150点上升至180点</li>
@@ -238,7 +214,7 @@ padding-right: 10px;
     <ul>
     <li>远古黑龙增加一个新技能，火球
     <p>以一片区域为目标吐出一个火球，点燃300范围内区域，持续10秒。每秒造成85点伤害。</p>
-    <p>冷却时间：10秒<br />魔法消耗：100点<br />施法距离：1000。</p>
+    <p>冷却时间：10秒<br />魔法消耗：100点<br />施法距离：1000。</p></li>
     </ul>
     <ul>
     <li>远古雷隐兽的暴怒现在以单位为目标</li>
@@ -335,13 +311,30 @@ padding-right: 10px;
 
     echo "</div></div>";
 
-    echo "</div>\n";
     // -------------left end--------------
 
     include "right.php";
 ?>
 
-</DIV>
+<script>
+//通过touchstart和touchend
+window.onload=function () {  
+    document.addEventListener('touchstart',function (event) {  
+            if(event.touches.length>1){  
+            event.preventDefault();  //阻止元素的默认行为
+            }  
+            })  
+    var lastTouchEnd=0;  
+    document.addEventListener('touchend',function (event) {  
+            var now=(new Date()).getTime();  
+            if(now-lastTouchEnd<=300){  
+            event.preventDefault();  
+            }  
+            lastTouchEnd=now;  //当前为最后一次触摸
+            },false)  
+}
+</script>
 
+</div>
 </body>
 </html>

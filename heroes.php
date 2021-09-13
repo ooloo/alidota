@@ -55,10 +55,10 @@ padding-right: 10px;
 </div>
 <div class="collapse navbar-collapse">
 <ul class="nav navbar-nav">
-<li><a href="http://alidota.com/index.php">Home</a></li>
-<li><a href="http://alidota.com/player.php">Player</a></li>
-<li class="active"><a href="http://alidota.com/heroes.php">Heroes</a></li>
-<li><a href="http://alidota.com/about.php">Updates</a></li>
+<li><a href="http://alidota.cn/home.php">Home</a></li>
+<li><a href="http://alidota.cn/player.php">Player</a></li>
+<li class="active"><a href="http://alidota.cn/heroes.php">Heroes</a></li>
+<li><a href="http://alidota.cn/about.php">Updates</a></li>
 </ul>
 </div><!--/.nav-collapse -->
 </div>

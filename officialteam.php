@@ -2,7 +2,7 @@
 
 include "hot.php";
 
-$team = array(
+$official_team = array(
         1075534 => 'Orange Esports Dota',
         2640099 => 'Shazam',
         2759317 => 'Elements',
@@ -76,9 +76,10 @@ $team = array(
         2523807 => 'Immortal',
         );
 
-$official_team = array();
+// official name
+$official_team_url = array();
 
-$key = "v1/?key=B1426000A46BD10C3FE0EAB36501A9E3&format=xml&language=zh&teams_requested=200";
+$key = "v1/?key=B1426000A46BD10C3FE0EAB36501A9E3&format=xml&language=zh&teams_requested=10";
 $head = "https://api.steampowered.com/IDOTA2Match_570/GetTeamInfoByTeamID";
 
 foreach($hot as $id => $num)
@@ -91,20 +92,20 @@ foreach($hot as $id => $num)
     $show_num = 0;
     foreach($xml->matches->match as $match)
     {
-        if(++$show_num >= 100) break;
+        if(++$show_num >= 201) break;
 
         if($match->radiant_team_id == "0" || $match->dire_team_id == "0")
             continue;
 
         $teamurl = "$head/$key&start_at_team_id=$match->radiant_team_id";
-        $official_team["$match->radiant_team_id"] = "$teamurl";
+        $official_team_url["$match->radiant_team_id"] = "$teamurl";
 
         $teamurl = "$head/$key&start_at_team_id=$match->dire_team_id";
-        $official_team["$match->dire_team_id"] = "$teamurl";
+        $official_team_url["$match->dire_team_id"] = "$teamurl";
     }
 }
 
-foreach($official_team as $teamid => $teamurl)
+foreach($official_team_url as $teamid => $teamurl)
 {
     echo "$teamurl\n";
     $content = file_get_contents("$teamurl");
@@ -120,20 +121,20 @@ foreach($official_team as $teamid => $teamurl)
         $tid = $teamid + $i;
         $i++;
 
-        if(!empty($tag))
+        if(!empty($tag) && $tag != "")
         {
             $dbh = dba_open("official_team.db", "c", "db4");
             dba_replace("$tid", "$tag", $dbh);
             dba_close($dbh);
-
-            $team["$tid"] = "$tag";
+            
+            $official_team["$tid"] = "$tag";
             echo "$tid $tag\n";
         }
     }
 }
 
-$handle = fopen("./team.php", "w+");
-fwrite($handle, '<?php'.chr(10).'$team='.var_export ($team,true).';'.chr(10).'?>');
+$handle = fopen("./official_team.php", "w+");
+fwrite($handle, '<?php'.chr(10).'$official_team='.var_export ($official_team,true).';'.chr(10).'?>');
 fclose($handle);
 
 ?>
