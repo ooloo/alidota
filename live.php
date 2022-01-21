@@ -31,15 +31,18 @@ foreach($xml->games->game as $game)
     else
         $bo = 1;
 
+
+    $rw = $game->radiant_series_wins;
+    $dw = $game->dire_series_wins;
     $rscore = $game->scoreboard->radiant->score;
     $dscore = $game->scoreboard->dire->score;
 
     $style = "style=\"white-space:nowrap;overflow:hidden;text-overflow:ellipsis;\"";
     echo "<tr>";
     echo "<td width=15%>$dur</td>";
-    echo "<td width=30% $style>联赛id:$l-观众:$s</td>";
-    echo "<td width=15%>BO$bo</td>";
-    echo "<td width=40% $style>$r ($rscore)<font color=green><b>&nbsp;.VS&nbsp;</b></font>($dscore) $d</td>";
+    echo "<td width=25% $style>联赛id:$l-观众:$s</td>";
+    echo "<td width=25%>BO$bo($rw:$dw)</td>";
+    echo "<td width=35% $style>$r ($rscore)<font color=green><b>&nbsp;.VS&nbsp;</b></font>($dscore) $d</td>";
     echo "</tr>";
 }
 

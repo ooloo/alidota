@@ -44,8 +44,8 @@
 <div class="collapse navbar-collapse">
 <ul class="nav navbar-nav">
 <li><a href="http://alidota.cn/index.php">Home</a></li>
-<li class="active"><a href="http://alidota.cn/player.php">Team-Player</a></li>
-<li><a href="http://alidota.cn/matches.php">Matches</a></li>
+<li><a href="http://alidota.cn/matches.php">Match</a></li>
+<li class="active"><a href="http://alidota.cn/player.php">Team</a></li>
 <li><a href="http://alidota.cn/about.php">About</a></li>
 </ul>
 </div><!--/.nav-collapse -->

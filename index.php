@@ -47,7 +47,8 @@
 <div class="collapse navbar-collapse">
 <ul class="nav navbar-nav">
 <li class="active"><a href="http://alidota.cn/index.php">Home</a></li>
-<li><a href="http://alidota.cn/matches.php">Matches</a></li>
+<li><a href="http://alidota.cn/matches.php">Match</a></li>
+<li><a href="http://alidota.cn/player.php">Team</a></li>
 <li><a href="http://alidota.cn/about.php">About</a></li>
 </ul>
 </div><!--/.nav-collapse -->
@@ -74,8 +75,8 @@
             echo "<ul class=\"list-group\">\n";
             echo "<li class=\"list-group-item\">\n";
             echo "<table class=\"table\">";
-            echo "<tr><th width=20%>Heroes</th><th width=20%>WinLose</th><th width=20%>Pick</th>";
-            echo "<th width=10%>KDA</th><th width=30%>本周热门装备</th></tr>";
+            echo "<tr><th width=20%>Heroes</th><th width=20%>W-L</th><th width=20%>WR</th>";
+            echo "<th width=10%>KDA</th><th width=30%>热门装备</th></tr>";
         }
 
         $picknum = $summary["all"];

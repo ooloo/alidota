@@ -149,6 +149,44 @@ foreach($file as $line)
     }
 }
 
+foreach($kda as $k => $v)
+{
+    $kda[$k] = array_splice($v, 0, 3);
+}
+
+foreach($kda as $k => $v)
+{
+    echo "----------- $k\n";
+    $teamTmp = explode('@', $k, 2);
+    $teamName = $teamTmp[0];
+    $playerName = $teamTmp[1];
+    if(!isset($teaminfo["$teamName"]))
+        $teaminfo["$teamName"] = array();
+    foreach($v as $hero => $h_arr)
+    {
+        if(!isset($teaminfo["$teamName"]["$playerName"]))
+        {
+            $teaminfo["$teamName"]["$playerName"] = array(
+                    "h" => "$hero",
+                    "w" => $h_arr["w"],
+                    "l" => $h_arr["l"],
+                    "k" => $h_arr["k"],
+                    "d" => $h_arr["d"],
+                    "a" => $h_arr["a"],
+                    );
+        }
+        else
+        {
+            $teaminfo["$teamName"]["$playerName"]["h"] = $teaminfo["$teamName"]["$playerName"]["h"]."|$hero";
+            $teaminfo["$teamName"]["$playerName"]["w"] = $teaminfo["$teamName"]["$playerName"]["w"]+$h_arr["w"];
+            $teaminfo["$teamName"]["$playerName"]["l"] = $teaminfo["$teamName"]["$playerName"]["l"]+$h_arr["l"];
+            $teaminfo["$teamName"]["$playerName"]["k"] = $teaminfo["$teamName"]["$playerName"]["k"]+$h_arr["k"];
+            $teaminfo["$teamName"]["$playerName"]["d"] = $teaminfo["$teamName"]["$playerName"]["d"]+$h_arr["d"];
+            $teaminfo["$teamName"]["$playerName"]["a"] = $teaminfo["$teamName"]["$playerName"]["a"]+$h_arr["a"];
+        }
+    }
+}
+
 $handle = fopen("./teamkda.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$teamkda='.var_export ($kda,true).';'.chr(10).'?>');
 fclose($handle);
@@ -172,6 +210,10 @@ fclose($handle);
 
 $handle = fopen("./team.php", "w+");
 fwrite($handle, '<?php'.chr(10).'$team='.var_export ($team,true).';'.chr(10).'?>');
+fclose($handle);
+
+$handle = fopen("./teaminfo.php", "w+");
+fwrite($handle, '<?php'.chr(10).'$teaminfo='.var_export ($teaminfo,true).';'.chr(10).'?>');
 fclose($handle);
 
 ?>

@@ -39,9 +39,10 @@ foreach($file as $line)
     $xml = simplexml_load_string($content);
 
     $star_team = 0;
+    $start_time = intval($xml->start_time);
 
-    $series_id = 0;
-    $series_type = 0; 
+    $series_id = strtotime(date("Y-m-d"), $start_time);
+    $series_type = 0;
     $radiant_team_id = $xml->radiant_team_id;
     $dire_team_id = $xml->dire_team_id;
 
@@ -53,8 +54,6 @@ foreach($file as $line)
         $radiant_team_id = "$seriesTerm[2]";
         $dire_team_id = "$seriesTerm[3]";
     }
-    else
-        continue;
     
     echo "$xml->match_id ======> $series_id, $series_type, $radiant_team_id, $dire_team_id\n";
 
